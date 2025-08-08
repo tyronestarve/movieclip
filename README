@@ -1,0 +1,198 @@
+# MovieClip - AI视频高光时刻生成系统
+
+## 项目简介
+
+MovieClip是一个基于AI的智能视频处理系统，能够自动分析视频内容，提取精彩高光时刻，并生成带有AI配音的高质量短视频。系统集成了Google Gemini AI、语音合成技术和FFmpeg视频处理能力，为用户提供一站式的视频内容创作解决方案。
+
+## 主要功能
+
+### 🎬 视频分析与剧情提取
+- 支持本地视频文件上传和GCS云存储链接
+- 使用 Gemini 2.5 Pro 自动分析视频内容和剧情结构
+- 智能识别视频中的精彩动作镜头、打斗画面等
+- 生成详细的时间戳和剧情描述
+
+### ✂️ 智能高光时刻生成
+- 根据指定角色和时长自动筛选高光片段
+- 支持自定义高光短片主角和持续时间
+- 智能视频分割和重新拼接
+- 保证故事完整性的片段选择算法
+
+### 🎙️ AI配音与旁白
+- 支持第一人称和第三人称叙事模式
+- 集成Google Cloud Text-to-Speech语音合成
+- 多种配音选择(中文/英文声音)
+- 自定义角色设定和叙述风格
+- 智能音视频同步和混音
+
+### 🎨 高级视频编辑
+- FFmpeg驱动的专业视频处理
+- 自动音频降噪和音量调节
+- 精确的时间戳控制和片段拼接
+
+## 技术架构
+
+### 核心技术栈
+- **前端框架**: Streamlit
+- **AI引擎**: Google Gemini 2.5 Pro
+- **语音合成**: Google Cloud Text-to-Speech
+- **视频处理**: FFmpeg/FFprobe
+- **云存储**: Google Cloud Storage
+- **编程语言**: Python 3.11.2+
+
+### 主要模块
+
+#### ailib/
+- **genai_client.py**: Gemini AI客户端，支持多种认证方式
+- **genai_speech.py**: 语音合成服务集成
+- **video_process.py**: 视频处理和编辑核心功能
+- **voice_keys.py**: 语音配置和密钥管理
+- **cloud_gcs.py**: Google Cloud Storage操作
+- **env_config.py**: 环境配置管理
+
+#### ui/
+- **pages/Main.py**: Streamlit主界面和交互逻辑
+
+## 安装与配置
+
+### 环境要求
+- Python 3.11.2 或更高版本
+- FFmpeg (最新版本推荐)
+- Google Cloud SDK (可选)
+
+### 依赖安装
+```bash
+pip3 install  -U -r build/requirements.txt
+```
+
+### 配置文件设置
+
+本项目使用 `.env` 文件进行配置。您可以复制 `.env.example` 文件并重命名为 `.env`，然后根据您的环境修改其中的配置项。
+
+```bash
+cp .env.example .env
+```
+
+请修改 `.env` 对应的配置项，替换为你自己的 project信息。
+
+## 使用指南
+
+### 启动应用
+```bash
+source .env
+python3 -m streamlit run ui/pages/Main.py
+```
+
+### 操作流程
+
+1. **视频输入**:
+   - 上传本地视频文件 或
+   - 提供GCS视频链接
+
+2. **参数设定**:
+   - 演员信息: 帮助AI准确识别人物
+   - 高光短片主角: 指定要突出的角色
+   - 高光短片时长: 设置目标视频长度
+
+3. **Step1: 提取剧情**:
+   - 系统自动分析视频内容
+   - 生成时间戳和剧情描述
+   - 识别精彩片段
+
+4. **Step2: 生成高光视频**:
+   - 根据参数筛选相关片段
+   - 自动拼接生成高光视频
+
+5. **Step3: 生成视频旁白**:
+   - 配置角色设定和叙述风格
+   - 选择旁白类型(第一/三人称)
+   - AI生成同步旁白文本
+
+6. **Step4: 合成旁白视频**:
+   - 选择配音声音
+   - 自动语音合成
+   - 混音生成最终视频
+
+## 配音选项
+
+### Google Cloud TTS
+
+
+### 声音克隆
+- 支持自定义声音训练
+- 需要提供参考音频
+
+## 性能优化建议
+
+1. **FFmpeg升级**: 建议使用最新版本FFmpeg以获得最佳性能
+2. **GCS配置**: 启用云存储可以提高大文件处理效率
+3. **并行处理**: 系统支持多进程视频分割以提高速度
+4. **缓存机制**: data/目录用于缓存中间文件，避免重复处理
+
+## 故障排除
+
+### 常见问题
+
+1. **音频时间戳对齐问题**:
+   - `audio_timestamp`参数对避免幻觉很重要
+   - 生成SRT字幕时需要注意PE参数
+
+2. **FFmpeg相关错误**:
+   - 确保FFmpeg正确安装并在PATH中
+   - 检查FFMPEG_EXECUTABLE和FFPROBE_EXECUTABLE配置
+
+3. **权限问题**:
+   - 检查GCS服务账户权限
+   - 确保服务账户文件路径正确
+
+4. **内存不足**:
+   - 调整MC_PARTITION_SECONDS减少分割片段大小
+   - 关闭MC_NEED_GCS在本地处理小文件
+
+## 开发信息
+
+### 项目结构
+```
+movieclip/
+├── ailib/              # 核心AI和处理库
+├── ui/                 # Streamlit用户界面
+├── build/              # 构建和依赖文件
+├── data/               # 缓存和临时文件
+├── .streamlit/         # Streamlit配置
+└── README.md           # 本文档
+```
+
+### Git仓库
+- Repository: https://github.com/howtosolveit/movieclip.git
+
+### 许可证
+请查看LICENSE文件了解详细信息。
+
+## 贡献指南
+
+欢迎提交Issue和Pull Request来改进这个项目。在贡献代码前，请确保:
+
+1. 代码符合项目的编码规范
+2. 添加必要的测试用例
+3. 更新相关文档
+
+## 联系方式
+
+如有问题或建议，请通过GitHub Issues联系我们。
+
+---
+
+**注意**: 本系统需要相应的Google Cloud服务或者API密钥才能正常运行。请确保已正确配置所有必需的认证信息。
+
+1 请参考文档 https://cloud.google.com/iam/docs/keys-create-delete#creating 
+    **** 创建service account key, 然后设置参数 SA_KEY_FILE_PATH为对应存储的路径 
+2 创建并设置存储桶,参考如下文档:
+    **** https://cloud.google.com/storage/docs/creating-buckets ****
+    **** 建议存储桶创建位置 和 LOCATION 设置为同一区域。****
+3 授权说明： Gemini的授权方式有 ADC/SA/AIS_API_KEY
+# 1 ADC: 请参考文档进行授权  
+https://cloud.google.com/docs/authentication/set-up-adc-local-dev-environment#local-user-cred
+# 2 SA : 请提供对应service account key的文件路径 SA_KEY_FILE_PATH
+https://cloud.google.com/iam/docs/keys-create-delete#creating
+#3 API KEY : 需要创建api key 
+https://cloud.google.com/docs/authentication/api-keys#create

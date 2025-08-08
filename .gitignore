@@ -1,0 +1,25 @@
+# Environments
+.env
+venv/
+bin/
+include/
+lib/
+pyvenv.cfg
+
+# IDEs
+.idea/
+movieclip.iml
+
+# Python
+__pycache__/
+*.pyc
+
+
+# OS-specific
+.DS_Store
+
+# Streamlit
+.streamlit/
+
+# Data files
+data/

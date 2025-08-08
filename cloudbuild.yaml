@@ -1,0 +1,12 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest', '.']
+
+  # Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest']
+
+# Store the image in Artifact Registry
+images:
+- 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest'

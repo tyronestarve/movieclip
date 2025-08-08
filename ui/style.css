@@ -1,0 +1,48 @@
+/* 整体布局样式 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    margin: 20px;
+}
+
+/* 视频播放器样式 */
+.video-player {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 按钮样式 */
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* 文本样式 */
+.text {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 图片样式 */
+.image {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+/* 分割线样式 */
+.divider-rainbow {
+    height: 3px;
+    background: linear-gradient(to right, #ff5e62, #ff9966, #ff5e62);
+    border: none;
+    margin: 20px 0;
+}

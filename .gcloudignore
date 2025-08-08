@@ -1,0 +1,20 @@
+# Cloud Build and Docker config files
+.gcloudignore
+cloudbuild.yaml
+.dockerignore
+
+# Virtual environment
+venv/
+__pycache__/
+
+# Git
+.git
+.gitignore
+
+# VSCode
+.vscode/
+
+.idea
+.streamlit
+bin
+data
