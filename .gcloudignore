@@ -15,6 +15,5 @@ __pycache__/
 .vscode/
 
 .idea
-.streamlit
 bin
 data

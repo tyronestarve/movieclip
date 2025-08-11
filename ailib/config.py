@@ -13,7 +13,7 @@
 # limitations under the License.
 
 gemini_long_output_model_list = [
-    "gemini-1.5-pro"
+    "gemini-2.5-pro"
 ]
 
 region_list= ["global","us-central1","asia-southeast1"]

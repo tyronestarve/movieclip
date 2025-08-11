@@ -1,12 +1,12 @@
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest', '.']
+    args: ['build', '-t', '$_LOCATION-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY/$_IMAGE_NAME:latest', '.']
 
   # Push the Docker image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest']
+    args: ['push', '$_LOCATION-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY/$_IMAGE_NAME:latest']
 
 # Store the image in Artifact Registry
 images:
-- 'us-central1-docker.pkg.dev/mylearningproject-429903/movieclip/movieclip:latest'
+- '$_LOCATION-docker.pkg.dev/$_PROJECT_ID/$_REPOSITORY/$_IMAGE_NAME:latest'

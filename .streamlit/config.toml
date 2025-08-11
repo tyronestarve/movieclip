@@ -1,0 +1,13 @@
+[browser]
+serverAddress = "0.0.0.0"
+gatherUsageStats = false
+
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+maxUploadSize = 10000
+
+[theme]
+base="dark"
+primaryColor="purple"

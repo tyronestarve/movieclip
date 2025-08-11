@@ -518,12 +518,16 @@ def split_video_ffmpeg(input_video_path, output_video_path, start_time, end_time
     return {"output_video_path": output_video_path, "gcs_uri": f"gs://{bucket_name}/{object_path}"}
 
 
-def split_video_by_multiprocess(input_video, output_dir, file_prefix, partition_seconds= 600, bucket_name=None, object_path=None,max_workers=10):
+def split_video_by_multiprocess(input_video, output_dir, file_prefix, partition_seconds= 600, bucket_name=None, object_path=None,max_workers=None):
     duration = get_video_duration_ffmpeg(input_video)
     if duration is None:
         print(f"无法获取视频 {input_video} 的时长。中止。")
         return {}
     
+    if max_workers is None:
+        max_workers = int(os.environ.get('MAX_WORKERS', 4))
+        print(f"未指定 max_workers，从环境变量 'MAX_WORKERS' 中获取或使用默认值: {max_workers}")
+
     num_segments = int(duration/partition_seconds)
     print(f"计算得到 {num_segments} 个分片。")
 

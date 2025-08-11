@@ -113,6 +113,76 @@ python3 -m streamlit run ui/pages/Main.py
    - 自动语音合成
    - 混音生成最终视频
 
+## 构建和部署到 Cloud Run
+
+### 部署准备：GCS 与服务账号
+
+在部署之前，你需要完成以下准备工作：
+
+#### 1. 创建 GCS 存储桶
+你的视频文件需要存储在 Google Cloud Storage (GCS) 中，以便 Cloud Run 服务可以访问。
+
+- **创建存储桶**: 如果你还没有 GCS 存储桶，请创建一个。建议将存储桶的区域设置为与你的 Cloud Run 服务相同的区域。
+  ```bash
+  # 将 BUCKET_NAME 替换为你想要的存储桶名称
+  gcloud storage buckets create gs://BUCKET_NAME --project=PROJECT_ID --location=LOCATION
+  ```
+- **上传视频**: 将你的视频文件上传到这个存储桶中。
+
+#### 2. 创建服务账号 (Service Account)
+为了让 Cloud Run 服务有权限访问 GCS 和其他 Google Cloud 服务，最佳实践是创建一个专用的服务账号。
+
+- **创建服务账号**:
+  ```bash
+  # 将 SA_NAME 替换为你想要的服务账号名称
+  gcloud iam service-accounts create SA_NAME \
+    --description="Service account for MovieClip Cloud Run service" \
+    --display-name="MovieClip Service Account"
+  ```
+- **获取服务账号邮箱**: 创建后，记下服务账号的邮箱地址，格式通常为 `SA_NAME@PROJECT_ID.iam.gserviceaccount.com`。你需要在 `.env` 文件中设置这个邮箱地址。
+
+#### 3. 分配权限
+为刚刚创建的服务账号授予访问 GCS 和调用 AI API 所需的权限。
+
+- **授予 GCS 访问权限**:
+  ```bash
+  # 将 BUCKET_NAME 和 SA_EMAIL 替换为你的实际值
+  gcloud storage buckets add-iam-policy-binding gs://BUCKET_NAME \
+    --member="serviceAccount:SA_EMAIL" \
+    --role="roles/storage.objectAdmin"
+  ```
+- **授予 AI 服务访问权限**:
+  ```bash
+  # 将 PROJECT_ID 和 SA_EMAIL 替换为你的实际值
+  gcloud projects add-iam-policy-binding PROJECT_ID \
+    --member="serviceAccount:SA_EMAIL" \
+    --role="roles/aiplatform.user"
+  ```
+
+### 部署步骤
+
+#### 1. 配置环境变量
+复制 `.env.example` 文件为 `.env`，并填写以下用于构建和部署的变量：
+- `PROJECT_ID`: 你的 Google Cloud 项目 ID。
+- `LOCATION`: 你的 Google Cloud 区域，例如 `us-central1`。
+- `REPOSITORY`: 你在 Artifact Registry 中的仓库名称。
+- `IMAGE_NAME`: 你要构建的 Docker 镜像的名称。
+- `SERVICE_NAME`: 你要部署的 Cloud Run 服务名称。
+- `SERVICE_ACCOUNT_EMAIL`: 你在上面创建的服务账号的邮箱地址。
+- `MAX_WORKERS`: 控制视频处理的并行进程数。在 Cloud Run 等内存受限的环境中，建议设置为一个较低的值（例如 `2` 或 `4`）以避免内存超限。
+
+#### 2. 构建 Docker 镜像
+运行以下命令来构建 Docker 镜像并将其推送到 Artifact Registry：
+```bash
+sh build.sh
+```
+
+#### 3. 部署到 Cloud Run
+运行以下命令来将你的应用部署到 Cloud Run：
+```bash
+sh deploy.sh
+```
+
 ## 配音选项
 
 ### Google Cloud TTS
